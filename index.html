@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shape Puzzle</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #f0f4ff;
+  color: #20264a;
+  padding: 20px;
+}
+h1 { color: #5746d8; }
+#shapes {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 25px 0;
+}
+.shape {
+  width: 85px;
+  height: 85px;
+  border: 3px solid transparent;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 48px;
+  cursor: pointer;
+  background: white;
+}
+.shape.selected { border-color: #5746d8; }
+#target {
+  font-size: 75px;
+  margin: 15px;
+}
+button {
+  background: #5746d8;
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 13px 20px;
+  font-size: 17px;
+  cursor: pointer;
+}
+#message { min-height: 28px; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>🧩 Shape Puzzle</h1>
+<p>Find the shape that matches the target!</p>
+<p>Target shape:</p>
+<div id="target">🔺</div>
+<div id="shapes"></div>
+<p id="message">Tap the matching shape.</p>
+<p>Score: <span id="score">0</span></p>
+<button onclick="newRound()">New Puzzle</button>
+
+<script>
+const allShapes = ["🔺", "🟢", "🟦", "⭐", "❤️", "🔶"];
+let answer = "";
+let score = 0;
+
+function newRound() {
+  answer = allShapes[Math.floor(Math.random() * allShapes.length)];
+  document.getElementById("target").textContent = answer;
+  const choices = [...allShapes]
+    .sort(() => Math.random() - 0.5);
+  const area = document.getElementById("shapes");
+  area.innerHTML = "";
+  choices.forEach(shape => {
+    const btn = document.createElement("button");
+    btn.className = "shape";
+    btn.textContent = shape;
+    btn.onclick = () => {
+      if (shape === answer) {
+        score++;
+        document.getElementById("score").textContent = score;
+        document.getElementById("message").textContent =
+          "🎉 Correct! Great job!";
+        newRound();
+      } else {
+        document.getElementById("message").textContent =
+          "Try again! Find the matching shape.";
+      }
+    };
+    area.appendChild(btn);
+  });
+  document.getElementById("message").textContent =
+    "Tap the matching shape.";
+}
+newRound();
+</script>
+</body>
+</html>
